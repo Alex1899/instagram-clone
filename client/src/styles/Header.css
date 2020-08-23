@@ -1,0 +1,10 @@
+
+.header {
+    border-bottom: 1px solid lightgray;
+    margin-bottom: 30px;
+}
+
+.header__image {
+    width: 100px;
+    margin-left: 20px
+}
