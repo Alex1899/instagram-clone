@@ -1,10 +1,12 @@
 .post {
     max-width: 600px;
-    max-height: 800px;
+
     display: flex;
     flex-direction: column;
     border: 1px solid lightgray;
-    margin: auto
+    margin: auto;
+    padding-bottom: 50px;
+    margin-bottom: 30px
 
 }
 
@@ -44,11 +46,40 @@
     text-align: center;
     justify-content: space-between;
     margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-.post__likeSaveSend > img {
+.post__captionComments {
+    padding-left: 15px;
     padding-right: 15px;
-    
+ 
 }
 
+.post__captionText {
+    font-size: 14px;
+}
 
+.line {
+    margin-top: 30px;
+    width: 100%;
+   
+}
+
+.post__inputText:focus {
+    outline: none;
+}
+.post__inputText {
+    border-bottom: none;
+    width: 100%;
+}
+
+.post__addComment {
+    display: flex;
+    justify-content: space-between;
+}
+
+.post__postButton:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
