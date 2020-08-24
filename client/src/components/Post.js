@@ -30,18 +30,35 @@ const useStyles = makeStyles((theme) => ({
 function Post() {
     const classes = useStyles();
     const [ liked, setLiked ] = useState(false);
+    const [ comments, setComments ] = useState([]);
     const [ saved, setSaved ] = useState(false);
-    const [text, setText ] = useState('');
+    const [ text, setText ] = useState('');
+    const [ likeCount, setLikeCount ] = useState(0);
+
    
 
     const optionsClick = () =>{
       //
     }
 
+    useEffect(() =>{
+      if (likeCount == 0 && !liked){
+        return
+      }
+      if(liked){
+        setLikeCount(likeCount + 1);
+      }else{
+        setLikeCount(likeCount - 1);
+      }
+    }, [liked])
+
     const likeClick = () => {
       setLiked(!liked);
-      // some other logic (increase like count etc..)
+      
     }
+      
+      // some other logic (increase like count etc..)
+    
 
     const saveClick = () => {
       setSaved(!saved);
@@ -50,11 +67,11 @@ function Post() {
 
     const handleChange = (e) => {
       setText(e.target.value);
-      
     }
 
     const postComment = () => {
-      console.log('Clicked Post');
+      setComments([...comments, text]);
+      setText('');
       // post comment
     }
 
@@ -87,7 +104,7 @@ function Post() {
 
             {/* like comment send save buttons */}
             <div className="post__controls">
-                <div className="post__likeSaveSend">
+                <div className="post__likeCommentSend">
                   <IconButton onClick={likeClick}>
                      <img src={liked ? "icons/black-like.svg" : "icons/like.svg"} alt="like"/>
                   </IconButton>
@@ -101,8 +118,9 @@ function Post() {
                 <IconButton onClick={saveClick}>
                      <img src={saved ? "icons/black-save.svg":"icons/save.svg"} alt="save"/>
                 </IconButton>
-            </div>
-
+            </div> 
+            <p className="post__likeCount"><strong>{likeCount > 0 && (likeCount > 1 ? likeCount + ' likes': likeCount + ' like')}</strong></p>
+           
             {/* caption and comments */}
             <div className="post__captionComments">
                <div className="post__caption">
@@ -111,21 +129,15 @@ function Post() {
                
                <div className="post__comments">
                  {/* probably like list of comments and do map to p tag */}
-                 <p className="post__captionText"><strong>Theo </strong>wow this is really mad</p>
+                 {comments && comments.map(comment => {
+                   return <p className="post__captionText">{comment}</p>
+                 })}
                </div> 
                <hr className="line"/>
                
                <div className="post__addComment">
-                  {/* <TextField  
-                     id="standard-textarea"
-                     className="post__inputText"
-                     rowsMax={4}
-                     value={text}
-                     placeholder="Add a comment..."
-                     onChange={handleChange}/> */}
-                     <InputBase onChange={handleChange} fullWidth multiline placeholder="Add a comment..."/>
-
-                  <p className="post__postButton" style={!text ? {opacity: 0.5}: {fontWeight: "bold"}} onClick={postComment}>Post</p>
+                  <InputBase value={text} onChange={handleChange} fullWidth multiline placeholder="Add a comment..."/>
+                  <p className="post__postButton" style={!text ? {opacity: 0.5}: { cursor: 'pointer'}} onClick={postComment}><strong>Post</strong></p>
                </div>
                
             </div>

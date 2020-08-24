@@ -5,8 +5,7 @@
     flex-direction: column;
     border: 1px solid lightgray;
     margin: auto;
-    padding-bottom: 50px;
-    margin-bottom: 30px
+    margin-bottom: 20px
 
 }
 
@@ -61,7 +60,7 @@
 }
 
 .line {
-    margin-top: 30px;
+    margin-top: 25px;
     width: 100%;
    
 }
@@ -79,7 +78,8 @@
     justify-content: space-between;
 }
 
-.post__postButton:hover {
-    opacity: 0.7;
-    cursor: pointer;
+.post__likeCount {
+   margin-top: -5px;
+   margin-left: 15px;
+   font-size: 14px;
 }
