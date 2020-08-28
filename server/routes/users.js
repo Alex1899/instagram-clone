@@ -24,8 +24,10 @@ router.post('/register', async function(req, res, next) {
 
 router.post('/login', async function(req, res, next){
   const userData = req.body;
+  console.log(userData);
 
-  const user = await User.findOne({ email: userData.email});
+  const user = await User.findOne({ username: userData.username});
+  console.log(user);
 
   if (!user)
     return res.status(400).send({msg: 'User not found with these details'});

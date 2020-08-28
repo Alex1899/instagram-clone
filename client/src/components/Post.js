@@ -3,12 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import '../styles/Post.css';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import TextField from '@material-ui/core/TextField';
 import InputBase from '@material-ui/core/InputBase';
+import { useStateValue } from '../context/StateProvider';
+// icon imports
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,10 +34,12 @@ function Post() {
     const [ liked, setLiked ] = useState(false);
     const [ comments, setComments ] = useState([]);
     const [ saved, setSaved ] = useState(false);
-    const [ text, setText ] = useState('');
+    const [ comment, setComment ] = useState('');
+    const [ postedComment, setPostedComment ] = useState(false);
     const [ likeCount, setLikeCount ] = useState(0);
 
-   
+    const { state, dispatch} = useStateValue();
+    
 
     const optionsClick = () =>{
       //
@@ -65,13 +69,14 @@ function Post() {
       // save to collection logic 
     }
 
+    // set comment 
     const handleChange = (e) => {
-      setText(e.target.value);
+      setComment(e.target.value);
     }
 
     const postComment = () => {
-      setComments([...comments, text]);
-      setText('');
+    setComments([...comments, <p className="post__captionText"><strong>{state.user}</strong> {comment}</p>]);
+      setComment('');
       // post comment
     }
 
@@ -106,38 +111,41 @@ function Post() {
             <div className="post__controls">
                 <div className="post__likeCommentSend">
                   <IconButton onClick={likeClick}>
-                     <img src={liked ? "icons/black-like.svg" : "icons/like.svg"} alt="like"/>
-                  </IconButton>
-                  <IconButton >
-                      <img src= "icons/comment.svg" alt="comment"/>
-                  </IconButton>
-                  <IconButton>
-                      <img src="icons/send.svg" alt="send"/>
-                  </IconButton>
+                    <img src={liked ? "icons/like/black-like.svg" : "icons/like/like.svg"} alt="like"/>
+                   </IconButton>
+                   <IconButton >
+                       <img src= "icons/comment/comment.svg" alt="comment"/>
+                   </IconButton>
+                   <IconButton>
+                       <img src="icons/send/send.svg" alt="send"/>
+                   </IconButton>
                 </div>
-                <IconButton onClick={saveClick}>
-                     <img src={saved ? "icons/black-save.svg":"icons/save.svg"} alt="save"/>
-                </IconButton>
+                {!saved ? <BookmarkBorderIcon  onClick={saveClick} fontSize="large"/> : <BookmarkIcon onClick={saveClick} fontSize="large"/>}
+         
+                {/* <IconButton onClick={saveClick}>
+                     <img src={saved ? "icons/save/black-save.svg":"icons/save/save.svg"} alt="save"/> 
+                </IconButton>  */}
             </div> 
             <p className="post__likeCount"><strong>{likeCount > 0 && (likeCount > 1 ? likeCount + ' likes': likeCount + ' like')}</strong></p>
            
             {/* caption and comments */}
             <div className="post__captionComments">
                <div className="post__caption">
-                 <p className="post__captionText"><strong>alex </strong>This view is mad</p>
+                  <p className="post__captionText"><strong>alex </strong> This view is crazy</p>
                </div>
                
                <div className="post__comments">
                  {/* probably like list of comments and do map to p tag */}
                  {comments && comments.map(comment => {
-                   return <p className="post__captionText">{comment}</p>
+                   return comment
+                  //  return <p className="post__captionText">{comment}</p>
                  })}
                </div> 
-               <hr className="line"/>
+               <hr/>
                
                <div className="post__addComment">
-                  <InputBase value={text} onChange={handleChange} fullWidth multiline placeholder="Add a comment..."/>
-                  <p className="post__postButton" style={!text ? {opacity: 0.5}: { cursor: 'pointer'}} onClick={postComment}><strong>Post</strong></p>
+                  <InputBase value={comment} onChange={handleChange} fullWidth multiline placeholder="Add a comment..."/>
+                  <p className="post__postButton" style={!comment ? {opacity: 0.5}: { cursor: 'pointer'}} onClick={postComment}><strong>Post</strong></p>
                </div>
                
             </div>

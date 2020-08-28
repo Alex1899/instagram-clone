@@ -1,10 +1,32 @@
 
 .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     border-bottom: 1px solid lightgray;
     margin-bottom: 30px;
+
 }
 
 .header__image {
     width: 100px;
     margin-left: 20px
+}
+
+.header__search {
+    width: 250px;
+    height: 20px;
+    background-color: #fcfcfc;
+    border-radius: 3px;
+    border: 1px solid lightgray;
+    padding: 5px;
+}
+
+.header__avatar {
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.header__navabr {
+    display: flex;
 }

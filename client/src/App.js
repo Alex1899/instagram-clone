@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
-import Post from './components/Post';
+import Home from './components/Home';
 import Header from './components/Header';
+import Profile from './components/Profile';
 import {BrowserRouter as Router, Switch, Route, useHistory} from 'react-router-dom'
 import Login from './components/auth/Login';
 import { useStateValue } from './context/StateProvider';
@@ -13,13 +14,17 @@ function App() {
         <Switch>
           <Route exact path='/'>
             <Header />
-            <Post />
+            <Home />
           </Route>
           <Route path='/login'>
             <Login />
           </Route>
           <Route path='/register'>
             <Register />
+          </Route>
+          <Route path='/profile'>
+            <Header />
+            <Profile />
           </Route>
         </Switch>
       </div>
