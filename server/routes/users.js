@@ -36,7 +36,12 @@ router.post('/login', async function(req, res, next){
   if(!match)
     return res.status(400).send({msg: 'Incorrect password for this user'});
 
-  res.send({user: user.username});
+  res.send({username: user.username, userId: user._id});
+})
+
+
+router.post('/post', async function(req, res, next){
+  const postData = req.body;
 })
 
 module.exports = router;

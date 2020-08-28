@@ -10,6 +10,7 @@ import { useStateValue } from '../context/StateProvider';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
+import { use } from '../../../server/routes/users';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,15 +30,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Post() {
+function Post({ postId, user, caption, comments, likeCount, imageUrl}) {
     const classes = useStyles();
     const [ liked, setLiked ] = useState(false);
-    const [ comments, setComments ] = useState([]);
     const [ saved, setSaved ] = useState(false);
     const [ comment, setComment ] = useState('');
-    const [ postedComment, setPostedComment ] = useState(false);
-    const [ likeCount, setLikeCount ] = useState(0);
-
+    const [ likesCount, setLikeCount ] = useState(likeCount);
     const { state, dispatch} = useStateValue();
     
 
@@ -75,7 +73,6 @@ function Post() {
     }
 
     const postComment = () => {
-    setComments([...comments, <p className="post__captionText"><strong>{state.user}</strong> {comment}</p>]);
       setComment('');
       // post comment
     }
@@ -126,19 +123,18 @@ function Post() {
                      <img src={saved ? "icons/save/black-save.svg":"icons/save/save.svg"} alt="save"/> 
                 </IconButton>  */}
             </div> 
-            <p className="post__likeCount"><strong>{likeCount > 0 && (likeCount > 1 ? likeCount + ' likes': likeCount + ' like')}</strong></p>
+            <p className="post__likeCount"><strong>{likesCount > 0 && (likesCount > 1 ? likesCount + ' likes': likesCount + ' like')}</strong></p>
            
             {/* caption and comments */}
             <div className="post__captionComments">
                <div className="post__caption">
-                  <p className="post__captionText"><strong>alex </strong> This view is crazy</p>
+                  <p className="post__captionText"><strong>{user.username} </strong> {caption}</p>
                </div>
                
                <div className="post__comments">
                  {/* probably like list of comments and do map to p tag */}
                  {comments && comments.map(comment => {
-                   return comment
-                  //  return <p className="post__captionText">{comment}</p>
+                    return <p className="post__captionText"><strong>{comment.username} </strong>{comment.text} </p>
                  })}
                </div> 
                <hr/>
