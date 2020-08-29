@@ -10,7 +10,7 @@ import { useStateValue } from '../context/StateProvider';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
-import { use } from '../../../server/routes/users';
+import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,11 +30,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Post({ postId, user, caption, comments, likeCount, imageUrl}) {
+function Post({ postId, username, caption, comments, likeCount, imageUrl}) {
     const classes = useStyles();
     const [ liked, setLiked ] = useState(false);
     const [ saved, setSaved ] = useState(false);
     const [ comment, setComment ] = useState('');
+    const [ postComments, setPostComments] = useState(comments);
     const [ likesCount, setLikeCount ] = useState(likeCount);
     const { state, dispatch} = useStateValue();
     
@@ -73,7 +74,26 @@ function Post({ postId, user, caption, comments, likeCount, imageUrl}) {
     }
 
     const postComment = () => {
+      let comtext = comment;
+      
+      setPostComments({
+        ...postComments,
+        text: comment,
+        username,
+      });
+      
       setComment('');
+
+      axios.post('http://localhost:9000/posts/comment', {
+        postId,
+        comment: comtext,
+        username,
+      })
+      .then(res => {
+        console.log(res);
+        setPostComments(res.data.comments);
+      })
+      .catch(e => console.log(e))
       // post comment
     }
 
@@ -102,7 +122,7 @@ function Post({ postId, user, caption, comments, likeCount, imageUrl}) {
             </div>
               
             {/* photo */}
-            <img className='post__image' src="assets/post.jpg" alt="post image"/>
+            <img className='post__image' src={imageUrl} alt="post image"/>
 
             {/* like comment send save buttons */}
             <div className="post__controls">
@@ -128,13 +148,16 @@ function Post({ postId, user, caption, comments, likeCount, imageUrl}) {
             {/* caption and comments */}
             <div className="post__captionComments">
                <div className="post__caption">
-                  <p className="post__captionText"><strong>{user.username} </strong> {caption}</p>
+                  <p className="post__captionText"><strong>{username} </strong> {caption}</p>
                </div>
                
                <div className="post__comments">
                  {/* probably like list of comments and do map to p tag */}
-                 {comments && comments.map(comment => {
-                    return <p className="post__captionText"><strong>{comment.username} </strong>{comment.text} </p>
+                 {postComments.map(comment => {
+                   if(comment.text)
+                      return <p className="post__captionText"><strong>{comment.username} </strong>{comment.text} </p>
+                      
+                    return
                  })}
                </div> 
                <hr/>

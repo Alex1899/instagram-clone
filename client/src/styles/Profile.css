@@ -1,0 +1,14 @@
+
+.profile__uploadedImage {
+    width: 100%;
+    object-fit: contain;
+    margin: 20px;
+}
+
+.profile__createPost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 900px;
+
+}

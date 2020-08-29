@@ -1,0 +1,5 @@
+.home__feed {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
