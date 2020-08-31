@@ -1,0 +1,3 @@
+Post:
+    Array<userId> -> who liked the Post
+

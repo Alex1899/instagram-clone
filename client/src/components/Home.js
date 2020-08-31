@@ -25,12 +25,14 @@ function Home() {
             
             {posts.map(post => {
                     return <Post
+                               key={post._id}
                                postId={post._id}
                                username={state.user}
                                caption={post.caption}
                                comments={post.comments}
-                               likeCount={post.likeCount}
-                               imageUrl="https://st1.photogallery.ind.sh/wp-content/uploads/indiacom/playboy-model-charlie-riina-will-make-your-eyes-pop-out-202001-1578409112.jpg"   
+                               likeCount={post.userLikedList.length}
+                               userLiked={post.userLikedList.length > 0 ? post.userLikedList.includes(state.userId) : false}
+                               imageUrl={post.imageUrl}  
                            />
                 })}
         </div>

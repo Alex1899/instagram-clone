@@ -21,7 +21,12 @@ router.post('/create', async function(req, res, next){
 
         const { userId, caption, imageUrl } = req.body;
         // save post in db
-        const post = new Post({ userId, caption, imageUrl, likeCount: 0 , comments: { text: '', username: ''}});
+        // Post.collection.dropIndexes((err, result) => {
+        //     console.log(result);
+        // });
+        // return
+
+        const post = new Post({ userId, caption, imageUrl, userLikedList: [], comments: [{}] });
         const savedPost = await post.save();
         console.log('saved post => ', savedPost);
         res.send({postId: savedPost._id});
@@ -37,17 +42,51 @@ router.post('/comment', async function(req, res, next){
         const { postId, comment, username } = req.body;
         console.log(comment);
         console.log(comment.toString());
-        await Post.updateOne({ _id: postId }, {
-            $set:{
-                    comments: {
-                        text: comment,
-                        username:username,
-                    }
-                }
-            
-        });
+        const post = await Post.findOne({ _id: postId });
+              
+        if(!post)
+           return res.status(500).send({msg: 'Error when updating post comments'});
+        
+        
+        console.log('comments ', post.comments);
+
+        post.comments = [
+            ...post.comments,{
+            text: comment,
+            username:username,
+        }];
+
+        await post.save();
+        res.send({comments: post.comments});
        
-        // sends nothing... fix
+
+    }catch(e){
+        console.log('Error', e);
+    }
+});
+
+
+router.post('/like', async function(req, res, next){
+    try{
+
+        console.log('post data', req.body);
+        const { postId, id, incrementCount } = req.body;
+        const post = await Post.findOne({ _id: postId});
+        if(!post)
+           return res.status(500).send({msg: 'Error when updating post comments'});
+        
+        if(incrementCount){
+            post.userLikedList = [
+                ...post.userLikedList,
+                id, 
+            ];  
+        }else {
+            post.userLikedList = post.userLikedList.filter(userId => userId !== id);
+        }
+            
+
+        await post.save();
+        res.send({ likesCount: post.userLikedList.length, userLikedList: post.userLikedList});
 
     }catch(e){
         console.log('Error', e);

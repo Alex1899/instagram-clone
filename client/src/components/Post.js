@@ -30,13 +30,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Post({ postId, username, caption, comments, likeCount, imageUrl}) {
+function Post({ postId, username, caption, comments, likeCount, userLiked, imageUrl}) {
     const classes = useStyles();
-    const [ liked, setLiked ] = useState(false);
+    const [ liked, setLiked ] = useState(userLiked);
+    const [ imageAlreadyLiked, setAlreadyLiked ] = useState(null);
     const [ saved, setSaved ] = useState(false);
     const [ comment, setComment ] = useState('');
     const [ postComments, setPostComments] = useState(comments);
     const [ likesCount, setLikeCount ] = useState(likeCount);
+    const [ viewComments, setViewComments ] = useState(false);
     const { state, dispatch} = useStateValue();
     
 
@@ -45,19 +47,23 @@ function Post({ postId, username, caption, comments, likeCount, imageUrl}) {
     }
 
     useEffect(() =>{
-      if (likeCount == 0 && !liked){
-        return
+      if(imageAlreadyLiked){
+       if(liked){
+         setLikeCount(likesCount + 1);
+       }else{
+         setLikeCount(likesCount - 1);
+       };
+       incrementLikeCount();
+       setAlreadyLiked(false);
       }
-      if(liked){
-        setLikeCount(likeCount + 1);
-      }else{
-        setLikeCount(likeCount - 1);
-      }
-    }, [liked])
+         
+     
+    }, [imageAlreadyLiked]);
+
 
     const likeClick = () => {
       setLiked(!liked);
-      
+      setAlreadyLiked(true);
     }
       
       // some other logic (increase like count etc..)
@@ -76,11 +82,12 @@ function Post({ postId, username, caption, comments, likeCount, imageUrl}) {
     const postComment = () => {
       let comtext = comment;
       
-      setPostComments({
+      setPostComments([
         ...postComments,
+      {
         text: comment,
         username,
-      });
+      }]);
       
       setComment('');
 
@@ -90,11 +97,22 @@ function Post({ postId, username, caption, comments, likeCount, imageUrl}) {
         username,
       })
       .then(res => {
-        console.log(res);
+        console.log('response => ', res.data.comments);
         setPostComments(res.data.comments);
       })
       .catch(e => console.log(e))
       // post comment
+    }
+
+    const incrementLikeCount = () => {
+      axios.post('http://localhost:9000/posts/like', {
+        postId,
+        id: state.userId,
+        incrementCount: liked,
+      })
+      .then(response => console.log('new likescount', response.data))
+      .catch(e => console.log(e));
+
     }
 
     return (
@@ -127,7 +145,9 @@ function Post({ postId, username, caption, comments, likeCount, imageUrl}) {
             {/* like comment send save buttons */}
             <div className="post__controls">
                 <div className="post__likeCommentSend">
-                  <IconButton onClick={likeClick}>
+                  <IconButton onClick={()=> {
+                    likeClick();
+                  }}>
                     <img src={liked ? "icons/like/black-like.svg" : "icons/like/like.svg"} alt="like"/>
                    </IconButton>
                    <IconButton >
@@ -153,12 +173,15 @@ function Post({ postId, username, caption, comments, likeCount, imageUrl}) {
                
                <div className="post__comments">
                  {/* probably like list of comments and do map to p tag */}
-                 {postComments.map(comment => {
-                   if(comment.text)
-                      return <p className="post__captionText"><strong>{comment.username} </strong>{comment.text} </p>
-                      
-                    return
-                 })}
+                 {!viewComments && postComments.length > 2 ? (
+                                    <p onClick={(e) => setViewComments(true)} className="post__viewCommentsText" >View all {postComments.length} comments</p>
+                                ) :  postComments.map((comment, i) => {
+                                     if(comment.text)
+                                       return <p key={i} className="post__captionText"><strong>{comment.username} </strong>{comment.text} </p>
+                 
+                                     
+                                   })
+                }
                </div> 
                <hr/>
                

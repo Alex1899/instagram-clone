@@ -6,17 +6,21 @@ const postSchema = mongoose.Schema({
     userId: {
         type: String,
         required: true,
-        unique: true,
+        sparse: true
     },
 
     caption: {
         type: String,
-        required: true,
     },
 
-    likeCount: {
-        type: Number,
+    userLikedList: {
+        type: [{
+            type: String,
+            unique: true
+        
+        }],
         required: true,
+        sparse: true,
     },
 
     imageUrl: {
@@ -32,6 +36,7 @@ const postSchema = mongoose.Schema({
                 type: String,
             }
         }],
+        sparse: true
     }
 }, { timestamps: true});
 

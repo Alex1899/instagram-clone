@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
   small: {
     width: theme.spacing(3.5),
     height: theme.spacing(3.5),
-    
   },
   listItemText: {
     fontSize: 14,
@@ -138,7 +137,7 @@ function Header() {
               <IconButton onClick={directClick} >
                   <img src= {onDirect ? "icons/send/black-send.svg" : "icons/send/send.svg"} alt="direct"/>
               </IconButton>
-              <IconButton onClick={handleClick}>
+              <IconButton  onClick={handleClick}>
                   <Avatar src='assets/avatar-pic.jpg' className={classes.small} />
               </IconButton>
               {/* dropdown menu */}

@@ -30,3 +30,7 @@
 .header__navabr {
     display: flex;
 }
+
+.header__avatarImage {
+    border-radius: 90%;
+}
