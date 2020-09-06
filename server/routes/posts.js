@@ -26,6 +26,9 @@ router.post('/create', async function(req, res, next){
         // });
         // return
 
+        if (!userId)
+            return res.status(400).send({msg: 'User id not supplied'})
+        
         const post = new Post({ userId, caption, imageUrl, userLikedList: [], comments: [{}] });
         const savedPost = await post.save();
         console.log('saved post => ', savedPost);

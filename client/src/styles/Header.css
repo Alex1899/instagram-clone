@@ -1,11 +1,23 @@
 
 .header {
+    position: sticky;
+    top:0;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+    background-color: white;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     border-bottom: 1px solid lightgray;
     margin-bottom: 30px;
+}
 
+.header__navbar {
+    display: flex;
+    align-items: center;
+    width: 1300px;
+    justify-content: space-between;
+    
 }
 
 .header__image {
@@ -27,7 +39,7 @@
     border: 1px solid black;
 }
 
-.header__navabr {
+.header__menu {
     display: flex;
 }
 

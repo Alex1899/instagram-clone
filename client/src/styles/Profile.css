@@ -4,6 +4,11 @@
     padding-right: 15px;
 }
 
+.profile__uploadImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .profile__uploadedImage {
     width: 100%;
     object-fit: contain;
@@ -82,3 +87,24 @@
     padding: 10px;
 }
 
+
+.profile__images {
+    max-width: 100%;
+    height: auto;
+}
+
+.profile__gridLayout {
+   display: flex;
+   justify-content: center;
+}
+
+.profile__grid {
+    width: 250px;
+
+}
+
+.divv {
+    border: 1px solid red;
+    display: flex;
+    justify-content: center;
+}

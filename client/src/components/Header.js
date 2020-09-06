@@ -40,11 +40,11 @@ const StyledMenu = withStyles({
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
-      horizontal: 'center',
+      horizontal: 'right',
     }}
     transformOrigin={{
       vertical: 'top',
-      horizontal: 'center',
+      horizontal: 'right',
     }}
     {...props}
   />
@@ -125,12 +125,13 @@ function Header() {
 
     return (
         <div className='header'>
-            <img className='header__image' src='assets/Instagram-Logo.png' />
+          <div className="header__navbar">
+            <img className='header__image' src='assets/Instagram-Logo.png' onClick={homeClick} />
             {/* search bar */}
             <input className="header__search" type="text" placeholder="Search..." />
 
             {/* navbar home, direct messaging, list of who liked ur pics, go to user profile  */}
-            <div className="header__navbar">
+            <div className="header__menu">
               <IconButton onClick={homeClick}>
                        <img src={onHome ? "icons/home/black-home.svg" : "icons/home/home.svg"} alt="home"/>
               </IconButton>
@@ -167,6 +168,7 @@ function Header() {
                
               </StyledMenu>
             </div>
+          </div>
         </div>
     )
 }

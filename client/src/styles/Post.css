@@ -1,23 +1,13 @@
-.post {
-    max-width: 600px;
-
-    display: flex;
-    flex-direction: column;
-    border: 1px solid lightgray;
-    margin: auto;
-    margin-bottom: 20px
-
-}
 
 .post__header{
     display: flex;
     justify-content: space-between;
+    padding: 5px;
 }
 
 .post__avatar {
     display: flex;
-    
-    padding-left: 15px;
+    padding-left: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -37,7 +27,9 @@
 
 .post__image{ 
     width: 100%;
-    object-fit: contain;
+    height: auto;
+    /* object-fit: contain; */
+
 }
 
 .post__controls {
@@ -60,10 +52,11 @@
     font-size: 14px;
 }
 
-.line {
-    margin-top: 25px;
-    width: 100%;
-   
+hr {
+    border: none;
+    height: 1px;   
+    background-color: lightgray;
+    margin-top: 20px;
 }
 
 .post__inputText:focus {
