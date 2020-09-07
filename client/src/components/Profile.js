@@ -46,9 +46,6 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
     backgroundColor: theme.palette.background.paper,
   },
-  gridList: {
-    width: 800,
-  },
 }));
 
 const DialogTitle = withStyles(styles)((props) => {
@@ -78,6 +75,7 @@ const DialogContent = withStyles((theme) => ({
 function Profile() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const [viewPost, setViewPost] = useState(null);
   const [posts, setPosts] = useState([]);
   const [fetchPosts, setFetchPosts] = useState(true);
   const { state, dispatch } = useStateValue();
@@ -127,20 +125,19 @@ function Profile() {
           <p className="profile__userBio">What is real will prosper.</p>
         </div>
       </div>
-      <hr className="line" />
-
-      {/* Create post, Posts, Saved,  */}
-      <div className="profile__postSection">
-        <div className="profile__postSectionNav">
-          <p onClick={handleClickOpen}>CREATE POST</p>
-          <p>POSTS</p>
-          <p>SAVED</p>
-          <p>TAGGED</p>
-        </div>
-      </div>
 
       <Grid container justify="center">
-        <Grid item style={{ maxWidth: 900 }}>
+        <Grid item style={{ maxidth: 900 }}>
+          <hr />
+          {/* Create post, Posts, Saved,  */}
+          <div className="profile__postSection">
+            <div className="profile__postSectionNav">
+              <p onClick={handleClickOpen}>CREATE POST</p>
+              <p>POSTS</p>
+              <p>SAVED</p>
+              <p>TAGGED</p>
+            </div>
+          </div>
           <Grid container spacing={4}>
             {posts &&
               posts.map((post) => {
@@ -155,17 +152,38 @@ function Profile() {
                     sm={4}
                     xs={4}
                   >
-                    <img
-                      className="profile__images"
-                      src={post.imageUrl}
-                      alt="Post image"
-                    />
+                    <div
+                      onClick={() => setViewPost(post)}
+                      className="container"
+                    >
+                      <img
+                        className="profile__image"
+                        src={post.imageUrl}
+                        alt="Post image"
+                      />
+                      <div className="overlay">
+                        <div className="divPad">
+                          <img src="icons/like/small-heart.svg" alt="likes" />
+                          <p>{post.userLikedList.length}</p>
+                        </div>
+                        <div>
+                          <img
+                            src="icons/comment/small-comment.svg"
+                            alt="comments"
+                          />
+                          <p>{post.comments.length}</p>
+                        </div>
+                      </div>
+                    </div>
                   </Grid>
                 );
               })}
           </Grid>
         </Grid>
       </Grid>
+
+      {/* view post dialog */}
+      {viewPost && <ProfilePost post={viewPost} />}
 
       {/* create post dialog */}
       <Dialog

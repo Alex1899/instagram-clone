@@ -9,3 +9,29 @@
     height: 100%;
 }
 
+.profilePost__comments{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.profilePost__avatar {
+    display: flex;
+    padding-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.profilePost__usernameLocation > p{
+    margin:0;
+}
+
+.profilePost__location {
+    color:#403f3f;
+    font-size: 12px;
+}
+
+.profilePost__username {
+    font-size: 14px;
+}
+
