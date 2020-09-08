@@ -9,10 +9,18 @@
     height: 100%;
 }
 
+.gridImage {
+    width: 100%;
+  
+}
+
 .profilePost__comments{
     display: flex;
+    width: 300px;
     justify-content: space-between;
     padding: 5px;
+    border: 1px solid red;
+
 }
 
 .profilePost__avatar {

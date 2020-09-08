@@ -96,4 +96,16 @@ router.post('/like', async function(req, res, next){
     }
 })
 
+
+router.delete("/delete/:postId", async function(req, res, next) {
+    console.log(req.params);
+    const { postId } = req.params;
+    const result = await Post.findByIdAndDelete(postId);
+    if (!result)
+        return res.send({msg: "Post does not exist with this id"});
+
+    console.log("deleted: ", result);
+    res.send({msg: "Successfuly deleted post"});
+})
+
 module.exports = router;

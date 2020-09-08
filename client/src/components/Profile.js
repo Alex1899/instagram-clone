@@ -74,7 +74,11 @@ const DialogContent = withStyles((theme) => ({
 
 function Profile() {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState({
+    createPostDialog: false,
+    viewPostDialog: false,
+  });
+
   const [viewPost, setViewPost] = useState(null);
   const [posts, setPosts] = useState([]);
   const [fetchPosts, setFetchPosts] = useState(true);
@@ -95,12 +99,28 @@ function Profile() {
     }
   }, [fetchPosts]);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (type, post = null) => {
+    switch (type) {
+      case "CREATE_POST":
+        setOpen({ ...open, createPostDialog: true });
+
+      case "VIEW_POST":
+        if (post) {
+          setViewPost(post);
+          setOpen({ ...open, viewPostDialog: true });
+        }
+
+      default:
+        return;
+    }
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = (type) => {
+    if (type === "VIEW_POST") {
+      setOpen({ ...open, viewPostDialog: false });
+    } else {
+      setOpen({ ...open, createPostDialog: false });
+    }
   };
 
   return (
@@ -127,18 +147,18 @@ function Profile() {
       </div>
 
       <Grid container justify="center">
-        <Grid item style={{ maxidth: 900 }}>
+        <Grid item justify="center">
           <hr />
           {/* Create post, Posts, Saved,  */}
           <div className="profile__postSection">
             <div className="profile__postSectionNav">
-              <p onClick={handleClickOpen}>CREATE POST</p>
+              <p onClick={() => handleClickOpen("CREATE_POST")}>CREATE POST</p>
               <p>POSTS</p>
               <p>SAVED</p>
               <p>TAGGED</p>
             </div>
           </div>
-          <Grid container spacing={4}>
+          <Grid container style={{ maxWidth: 900 }} spacing={4}>
             {posts &&
               posts.map((post) => {
                 return (
@@ -153,7 +173,7 @@ function Profile() {
                     xs={4}
                   >
                     <div
-                      onClick={() => setViewPost(post)}
+                      onClick={() => handleClickOpen("VIEW_POST", post)}
                       className="container"
                     >
                       <img
@@ -183,17 +203,40 @@ function Profile() {
       </Grid>
 
       {/* view post dialog */}
-      {viewPost && <ProfilePost post={viewPost} />}
+      {viewPost && (
+        <Dialog
+          fullWidth={true}
+          maxWidth="md"
+          onClose={() => handleClose("VIEW_POST")}
+          aria-labelledby="customized-dialog-title"
+          open={open.viewPostDialog}
+          PaperProps={{
+            style: {
+              backgroundColor: "transparent",
+              boxShadow: "none",
+            },
+          }}
+        >
+          <DialogTitle
+            id="customized-dialog-title"
+            onClose={() => handleClose("VIEW_POST")}
+          />
+          <ProfilePost post={viewPost} />
+        </Dialog>
+      )}
 
       {/* create post dialog */}
       <Dialog
         fullWidth={true}
         maxWidth="sm"
-        onClose={handleClose}
+        onClose={() => handleClose("CREATE_POST")}
         aria-labelledby="customized-dialog-title"
-        open={open}
+        open={open.createPostDialog}
       >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <DialogTitle
+          id="customized-dialog-title"
+          onClose={() => handleClose("CREATE_POST")}
+        >
           Upload your photo
         </DialogTitle>
         <StyledCropper />

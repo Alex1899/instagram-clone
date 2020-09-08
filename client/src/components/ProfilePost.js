@@ -30,38 +30,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: "absolute",
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-});
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-
 const DialogContent = withStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -80,62 +48,54 @@ function ProfilePost({ post }) {
     //
   };
 
+  const deletePost = () => {};
+
   return (
-    <Dialog
-      fullWidth={true}
-      maxWidth="md"
-      onClose={handleClose}
-      aria-labelledby="customized-dialog-title"
-      open={open}
+    <DialogContent
+      style={{
+        // height: 500,
+        display: "flex",
+        justifyContent: "center",
+      }}
     >
-      <DialogTitle  id="customized-dialog-title" onClose={handleClose}/>
-      <DialogContent
-        style={{
-          // height: 500,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        {/* Grid maybe */}
-        <Grid container style={{ width: 900 }}>
-          <Grid item>
-            <img src={post.imageUrl} alt="post image" />
-          </Grid>
-          <Grid item>
-            <div className="profilePost__comments">
-              {/* header */}
-              <div className="profilePost__header">
-                <div className="profilePost__avatar">
-                  <Box pr={2}>
-                    <Avatar
-                      src="assets/avatar-pic.jpg"
-                      className={classes.small}
-                    />
-                  </Box>
+      {/* Grid maybe */}
 
-                  <div className="profilePost__usernameLocation">
-                    <p className="profilePost__username">
-                      <strong>{post.username}</strong>
-                    </p>
-                    <p className="profilePost__location">Tbilisi</p>
-                  </div>
-                </div>
-
-                <IconButton
-                  className="profilePost__options"
-                  aria-label="more"
-                  onClick={optionsClick}
-                >
-                  <MoreVertIcon />
-                </IconButton>
-              </div>
-
-              {/* comments */}
-            </div>
-          </Grid>
+      <Grid container style={{ maxWidth: 800, height: 500, display: "flex" }} justify="center">
+        <Grid item>
+          <div style={{ border:"1px solid red", width: 400}}>
+            <img className="gridImage" src={post.imageUrl} alt="post image" />
+          </div>
         </Grid>
-      </DialogContent>
-    </Dialog>
+
+        <div className="profilePost__comments">
+          {/* header */}
+          <div className="profilePost__header">
+            <div className="profilePost__avatar">
+              <Box pr={2}>
+                <Avatar src="assets/avatar-pic.jpg" className={classes.small} />
+              </Box>
+
+              <div className="profilePost__usernameLocation">
+                <p className="profilePost__username">
+                  <strong>{post.username}</strong>
+                </p>
+                <p className="profilePost__location">Tbilisi</p>
+              </div>
+            </div>
+
+            <IconButton
+              className="profilePost__options"
+              aria-label="more"
+              onClick={optionsClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+          </div>
+
+          {/* comments */}
+        </div>
+      </Grid>
+    </DialogContent>
   );
 }
 
