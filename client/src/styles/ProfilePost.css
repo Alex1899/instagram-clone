@@ -1,4 +1,8 @@
 
+p {
+    font-size: 14px;
+}
+
 .profilePost {
     width: 300px;
     height: 300px;    
@@ -14,18 +18,28 @@
   
 }
 
-.profilePost__comments{ 
+.profilePost__section{ 
     width: 100%;
     height: 100%;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     
+}
+
+.profilePost__section > div > hr {
+    border: none; 
+    height: 1px;   
+    background-color: #e6e6e6;
+    margin-top: 10px;
+    margin-bottom: 15px;
 }
 
 .profilePost__header{
     display: flex;
     justify-content: space-between;
-  
-
+    
 }
 
 .profilePost__avatar {
@@ -53,6 +67,49 @@
     padding-right: 10px;
 }
 
-.profilePost__captionText {
-    font-size: 14px;
+.profilePost__avatarUsername{
+    display: flex;
+    align-items: center;
+}
+
+.profilePost__addComment {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #e6e6e6;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 10px;
+
+}
+
+.profilePost__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #e6e6e6;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+ 
+
+}
+
+.profilePost__likeCommentSend > img {
+    padding-right: 15px;
+
+}
+
+.profilePost__likeCommentSend > img:hover {
+    cursor: pointer;
+}
+
+.profilePost__likeCount {
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.profilePost__editCaption { 
+    display: flex;
+    align-items: center;
 }
