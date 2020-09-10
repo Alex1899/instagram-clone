@@ -74,11 +74,6 @@ const ImageCropper = ({ classes }) => {
     setSelectedImage(image);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedImage(null);
-  };
-
   const createPost = () => {
     setUploading(true);
     // save post in db
@@ -89,10 +84,11 @@ const ImageCropper = ({ classes }) => {
         imageUrl: croppedImage,
       })
       .then((response) => {
-        console.log(response.data);
+        window.location.reload();
         setOpen(false);
         setUploading(false);
-        window.location.reload();
+        console.log(response.data);
+       
       })
       .catch((error) => console.log(error));
   };

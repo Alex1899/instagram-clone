@@ -147,7 +147,7 @@ function Profile() {
       </div>
 
       <Grid container justify="center">
-        <Grid item justify="center">
+        <Grid item  style={{ width: 900 }} justify="center">
           <hr />
           {/* Create post, Posts, Saved,  */}
           <div className="profile__postSection">
@@ -158,7 +158,7 @@ function Profile() {
               <p>TAGGED</p>
             </div>
           </div>
-          <Grid container style={{ maxWidth: 900 }} spacing={4}>
+          <Grid container  spacing={4}>
             {posts &&
               posts.map((post) => {
                 return (
@@ -166,10 +166,6 @@ function Profile() {
                     // style={{ width: 250, height: 300}}
                     key={post._id}
                     item
-                    xl={4}
-                    lg={4}
-                    md={4}
-                    sm={4}
                     xs={4}
                   >
                     <div
@@ -212,7 +208,7 @@ function Profile() {
           open={open.viewPostDialog}
           PaperProps={{
             style: {
-              backgroundColor: "transparent",
+              backgroundColor:  "transparent",
               boxShadow: "none",
             },
           }}

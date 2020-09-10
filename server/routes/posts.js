@@ -6,10 +6,11 @@ const Comments = require('../model/commentSchema');
 
 router.get('/', async function(req, res, next){
     console.log('handling get req...')
-    const posts = await Post.find();
+    let posts = await Post.find();
     if (!posts)
         return res.status(500).send({msg: 'No posts in the database'});
 
+    posts = posts.reverse();
     res.send({ posts });
 })
 
@@ -29,7 +30,7 @@ router.post('/create', async function(req, res, next){
         if (!userId)
             return res.status(400).send({msg: 'User id not supplied'})
         
-        const post = new Post({ userId, caption, imageUrl, userLikedList: [], comments: [{}] });
+        const post = new Post({ userId, caption, imageUrl, userLikedList: [], comments: [] });
         const savedPost = await post.save();
         console.log('saved post => ', savedPost);
         res.send({postId: savedPost._id});
