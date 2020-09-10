@@ -89,7 +89,9 @@ function Profile() {
   useEffect(() => {
     if (fetchPosts) {
       axios
-        .get("http://localhost:9000/posts")
+        .post("http://localhost:9000/posts", {
+          userId: state.userId
+        })
         .then((response) => {
           console.log(response.data);
           setPosts(response.data.posts);

@@ -4,9 +4,10 @@ const Post = require('../model/postSchema');
 const Comments = require('../model/commentSchema');
 
 
-router.get('/', async function(req, res, next){
-    console.log('handling get req...')
-    let posts = await Post.find();
+router.post('/', async function(req, res, next){
+    console.log(req.body);
+    const { userId }  = req.body
+    let posts = await Post.find({userId});
     if (!posts)
         return res.status(500).send({msg: 'No posts in the database'});
 

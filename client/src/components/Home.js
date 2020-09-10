@@ -11,7 +11,9 @@ function Home() {
     const { state, dispatch } = useStateValue();
 
     useEffect(() => {
-        axios.get('http://localhost:9000/posts')
+        axios.post('http://localhost:9000/posts', {
+            userId: state.userId
+        })
             .then(response => {
                 console.log(response.data);
                 setPosts(response.data.posts);

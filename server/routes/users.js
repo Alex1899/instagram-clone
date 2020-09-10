@@ -40,8 +40,16 @@ router.post('/login', async function(req, res, next){
 })
 
 
-router.post('/post', async function(req, res, next){
-  const postData = req.body;
+router.get('/:username', async function(req, res, next){
+  const { username } = req.params;
+  console.log('username => ', username);
+
+  const user = await User.findOne({ username});
+  if(!user)
+    return res.send({msg: "User not found"});
+  
+  res.send({username, avatar: user.avatar});
+
 })
 
 module.exports = router;

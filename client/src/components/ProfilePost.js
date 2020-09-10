@@ -190,7 +190,7 @@ function ProfilePost({ post }) {
           <img className="gridImage" src={post.imageUrl} alt="post image" />
         </Grid>
 
-        <Grid item xs={12} sm={5} lg={4}>
+        <Grid item xs={12} sm={7} lg={4}>
           <div className="profilePost__section">
             <div>
               {/* header */}
@@ -245,20 +245,22 @@ function ProfilePost({ post }) {
                 <div className="profilePost__caption">
                   {!edditing ? (
                     caption && (
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        <div className="profilePost__avatarUsername">
-                          <Box pr={2}>
-                            <Avatar
-                              src="assets/avatar-pic.jpg"
-                              className={classes.small}
-                            />
-                          </Box>
-                          <p style={{ marginRight: 5 }}>
-                            <strong>{state.user}</strong>{" "}
-                            {caption}
-                          </p>
-                        </div>
-                        
+                      <div
+                        style={{ display: "flex", marginBottom: 20 }}
+                        // className="profilePost__avatarUsername"
+                      >
+                        <Box pr={2}>
+                          <Avatar
+                            src="assets/avatar-pic.jpg"
+                            className={classes.small}
+                          />
+                        </Box>
+                        <p style={{ margin: 0, padding: 0 }}>
+                          <strong style={{ marginRight: 5 }}>
+                            {state.user}
+                          </strong>
+                          {caption}
+                        </p>
                       </div>
                     )
                   ) : (
@@ -268,7 +270,8 @@ function ProfilePost({ post }) {
                         onChange={handleCaptionChange}
                         fullWidth
                         multiline
-                        autoFocus
+                        autoFocus={true}
+                        placeholder={!caption && "Add caption..."}
                         style={{ fontSize: 14 }}
                       />
                       <p
@@ -282,16 +285,35 @@ function ProfilePost({ post }) {
                   )}
                 </div>
 
-                <div className="profilePost__comments">
-                  {/* probably like list of comments and do map to p tag */}
-                  {post.comments &&
-                    post.comments.map((comment, i) => {
+                <div
+                  className="profilePost__comments"
+                  style={{
+                   
+                    maxHeight: !caption ? 260 : 210,
+                    overflowY: "auto",
+                  }}
+                >
+                  {postComments &&
+                    postComments.map((comment, i) => {
                       if (comment.text)
                         return (
-                          <p key={i} className="profilePost__captionText">
-                            <strong>{comment.username} </strong>
-                            {comment.text}{" "}
-                          </p>
+                          <div
+                            style={{ display: "flex", marginBottom: 20 }}
+                            // className="profilePost__avatarUsername"
+                          >
+                            <Box pr={2}>
+                              <Avatar
+                                src="assets/avatar-pic.jpg"
+                                className={classes.small}
+                              />
+                            </Box>
+                            <p style={{ margin: 0, padding: 0 }}>
+                              <strong style={{ marginRight: 5 }}>
+                                {comment.username}
+                              </strong>
+                              {comment.text}
+                            </p>
+                          </div>
                         );
                     })}
                 </div>
