@@ -11,7 +11,7 @@ function Home() {
     const { state, dispatch } = useStateValue();
 
     useEffect(() => {
-        axios.post('http://localhost:9000/posts', {
+        axios.post('/api/posts', {
             userId: state.userId
         })
             .then(response => {
@@ -34,7 +34,7 @@ function Home() {
                                comments={post.comments}
                                likeCount={post.userLikedList.length}
                                userLiked={post.userLikedList.length > 0 ? post.userLikedList.includes(state.userId) : false}
-                               imageUrl={post.imageUrl}  
+                               imageUrl={post.imageId}  
                            />
                 })}
         </div>

@@ -95,7 +95,7 @@ function Header() {
 
   const handleSearchClick = () => {
     setSearchPressed(true);
-    axios.get(`http://localhost:9000/users/${searchText}`).then((res) => {
+    axios.get(`/api/users/${searchText}`).then((res) => {
       console.log(res.data);
       setSearchResult(res.data);
     });

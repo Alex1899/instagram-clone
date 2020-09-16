@@ -89,7 +89,7 @@ function Profile() {
   useEffect(() => {
     if (fetchPosts) {
       axios
-        .post("http://localhost:9000/posts", {
+        .post("/api/posts/", {
           userId: state.userId
         })
         .then((response) => {
@@ -176,7 +176,7 @@ function Profile() {
                     >
                       <img
                         className="profile__image"
-                        src={post.imageUrl}
+                        src={post.imageId}
                         alt="Post image"
                       />
                       <div className="overlay">

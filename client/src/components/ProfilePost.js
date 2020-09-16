@@ -128,7 +128,7 @@ function ProfilePost({ post }) {
     setComment("");
 
     axios
-      .post("http://localhost:9000/posts/comment", {
+      .post("/api/posts/comment", {
         postId: post._id,
         comment: comtext,
         username: state.user,
@@ -142,7 +142,7 @@ function ProfilePost({ post }) {
 
   const incrementLikeCount = () => {
     axios
-      .post("http://localhost:9000/posts/like", {
+      .post("/api/posts/like", {
         postId: post._id,
         id: state.userId,
         incrementCount: liked,
@@ -153,7 +153,7 @@ function ProfilePost({ post }) {
 
   const deletePost = (postId) => {
     axios
-      .delete(`http://localhost:9000/posts/delete/${postId}`)
+      .delete(`/api/posts/delete/${postId}`)
       .then((res) => {
         console.log(res.data);
         setAnchorEl(null);
@@ -187,7 +187,7 @@ function ProfilePost({ post }) {
             alignItems: "center",
           }}
         >
-          <img className="gridImage" src={post.imageUrl} alt="post image" />
+          <img className="gridImage" src={post.imageId} alt="post image" />
         </Grid>
 
         <Grid item xs={12} sm={7} lg={4}>

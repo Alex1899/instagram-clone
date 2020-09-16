@@ -102,7 +102,7 @@ function Post({
     setComment("");
 
     axios
-      .post("http://localhost:9000/posts/comment", {
+      .post("/api/posts/comment", {
         postId,
         comment: comtext,
         username,
@@ -117,7 +117,7 @@ function Post({
 
   const incrementLikeCount = () => {
     axios
-      .post("http://localhost:9000/posts/like", {
+      .post("/api/posts/like", {
         postId,
         id: state.userId,
         incrementCount: liked,

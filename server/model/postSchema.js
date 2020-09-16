@@ -9,6 +9,11 @@ const postSchema = mongoose.Schema({
         sparse: true
     },
 
+    imageId: {
+        type: String,
+        required: true,
+    },
+
     caption: {
         type: String,
     },
@@ -22,11 +27,7 @@ const postSchema = mongoose.Schema({
         required: true,
         sparse: true,
     },
-
-    imageUrl: {
-        type: String,
-        required: true,
-    },
+    
     comments: {
         type: [{
             text: {

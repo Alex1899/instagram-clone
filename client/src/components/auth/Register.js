@@ -28,7 +28,7 @@ function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:9000/users/register', formData)
+        axios.post('/api/users/register', formData)
             .then(response => {
                 dispatch({ type: "LOGIN_USER", payload: response.data});
                 history.push('/');

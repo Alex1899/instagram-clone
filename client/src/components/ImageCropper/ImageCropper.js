@@ -3,7 +3,7 @@ import Slider from "@material-ui/core/Slider";
 import Cropper from "react-easy-crop";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { getCroppedImg, readFile } from "./utils";
+import { getCroppedImg, readFile, blobToFile } from "./utils";
 import { withStyles } from "@material-ui/core/styles";
 import { styles } from "../../styles/ImageCropper/ImageCropperStyles";
 import MuiDialogContent from "@material-ui/core/DialogContent";
@@ -32,7 +32,9 @@ const ImageCropper = ({ classes }) => {
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
+  const [croppedImageBlob, setCroppedImageBlob] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imageExt, setImageExt] = useState(null);
   const [open, setOpen] = useState(false);
   const [fetchPosts, setFetchPosts] = useState(true);
   const [caption, setCaption] = useState("");
@@ -50,45 +52,62 @@ const ImageCropper = ({ classes }) => {
 
   const showCroppedImage = useCallback(async () => {
     setCropping(true);
-    try {
-      const croppedImage = await getCroppedImg(
-        selectedImage,
-        croppedAreaPixels
-      );
-      console.log("donee", { croppedImage });
-      setCroppedImage(croppedImage);
-      setReadyToPost(true);
-      setCropDone(true);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [selectedImage, croppedAreaPixels]);
+    //try {
+      // const arr = await getCroppedImg(
+      //   selectedImage,
+      //   croppedAreaPixels
+      // );
+      // console.log("donee", arr[1]);
+      // setCroppedImageBlob(arr[1]);
+      
+      // console.log('image format => ', imageExt) ;
+
+      // blobToFile(
+      //   arr[1],
+      //   selectedImage,
+      //   imageExt
+      // ).then(file => {
+      //   console.log(file);
+      //   setCroppedImage(file);
+      // });
+    //   setCroppedImage(selectedImage);
+    //   setReadyToPost(true);
+    //   setCropDone(true);
+    // } catch (e) {
+    //   console.error(e);
+    // }
+    createPost()
+  }, [selectedImage, croppedImage, croppedAreaPixels]);
 
   const onClose = useCallback(() => {
     setCroppedImage(null);
   }, []);
 
   const onFileChange = async (e) => {
-    let image = await readFile(e.target.files[0]);
-    console.log("image path", image);
-    setSelectedImage(image);
+    let file = e.target.files[0];
+    console.log(file);
+    console.log('file path => ', file.path);
+
+    // let image = await readFile(file);
+    setSelectedImage(file);
   };
 
   const createPost = () => {
     setUploading(true);
+
+    let formData = new FormData();
+    formData.append('caption', caption);
+    formData.append('userId', state.userId);
+    formData.append('file', selectedImage);
+
     // save post in db
     axios
-      .post("http://localhost:9000/posts/create", {
-        userId: state.userId,
-        caption,
-        imageUrl: croppedImage,
-      })
+      .post("api/posts/create", formData)
       .then((response) => {
         window.location.reload();
         setOpen(false);
         setUploading(false);
         console.log(response.data);
-       
       })
       .catch((error) => console.log(error));
   };
@@ -117,7 +136,7 @@ const ImageCropper = ({ classes }) => {
             <div className="profile__createPost">
               <img
                 className="profile__uploadedImage"
-                src={croppedImage}
+                src={croppedImageBlob}
                 alt="uploaded image"
               />
               <InputBase
@@ -182,7 +201,7 @@ const ImageCropper = ({ classes }) => {
                 </div>
 
                 <Button
-                  onClick={showCroppedImage}
+                  onClick={createPost}
                   variant="contained"
                   color="black"
                   style={{ width: "100%" }}
@@ -195,7 +214,7 @@ const ImageCropper = ({ classes }) => {
           )
         ) : (
           <div style={{ display: "flex", justifyContent: "center" }}>
-              <CircularProgress />
+            <CircularProgress />
           </div>
         )}
       </DialogContent>

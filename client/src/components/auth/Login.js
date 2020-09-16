@@ -24,7 +24,7 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:9000/users/login', formData)
+        axios.post('/api/users/login', formData)
             .then(response => {
                 console.log(response.data);
                 dispatch({ type: "LOGIN_USER", payload: response.data});
