@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
-import Post from './Post';
+import Post from './posts/Post';
 import axios from 'axios';
 import { useStateValue } from '../context/StateProvider';
 import '../styles/Home.css'
@@ -11,7 +11,7 @@ function Home() {
     const { state, dispatch } = useStateValue();
 
     useEffect(() => {
-        axios.post('/api/posts', {
+        axios.get(`/api/posts/${state.userId}`, {
             userId: state.userId
         })
             .then(response => {

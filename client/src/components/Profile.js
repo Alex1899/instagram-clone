@@ -9,7 +9,7 @@ import axios from "axios";
 import { useStateValue } from "../context/StateProvider";
 import { useHistory } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
-import ProfilePost from "../components/ProfilePost";
+import ProfilePost from "../components/posts/ProfilePost";
 import "../styles/Profile.css";
 import { Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
@@ -18,6 +18,7 @@ import StyledCropper from "./ImageCropper/ImageCropper";
 import Dialog from "@material-ui/core/Dialog";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import SettingsIcon from "@material-ui/icons/Settings";
 import { readFile } from "../components/ImageCropper/utils";
 
 const styles = (theme) => ({
@@ -37,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
   large: {
     width: theme.spacing(24),
     height: theme.spacing(24),
-    marginLeft: 90,
   },
   root: {
     display: "flex",
@@ -89,9 +89,7 @@ function Profile() {
   useEffect(() => {
     if (fetchPosts) {
       axios
-        .post("/api/posts/", {
-          userId: state.userId
-        })
+        .get(`/api/posts/${state.userId}`)
         .then((response) => {
           console.log(response.data);
           setPosts(response.data.posts);
@@ -128,10 +126,14 @@ function Profile() {
   return (
     <div className="profile">
       {/* avatar, username */}
+
       <div className="profile__info">
         <Avatar src="assets/avatar-pic.jpg" className={classes.large} />
         <div className="profile__userDetails">
-          <p style={{ fontSize: 30, marginBottom: 10 }}>{state.user}</p>
+          <div className="profile__editProfile">
+            <p style={{ fontSize: 30, paddingRight: 30 }}>{state.user}</p>
+            <SettingsIcon onClick={()=> history.push('/account/edit')} style={{ marginBottom: -10, cursor: "pointer" }} />
+          </div>
           <div className="profile__userFollowersCount">
             <p>
               <strong>26</strong> posts
@@ -149,7 +151,7 @@ function Profile() {
       </div>
 
       <Grid container justify="center">
-        <Grid item  style={{ width: 900 }} justify="center">
+        <Grid item style={{ width: 900 }} justify="center">
           <hr />
           {/* Create post, Posts, Saved,  */}
           <div className="profile__postSection">
@@ -160,7 +162,7 @@ function Profile() {
               <p>TAGGED</p>
             </div>
           </div>
-          <Grid container  spacing={4}>
+          <Grid container spacing={4}>
             {posts &&
               posts.map((post) => {
                 return (
@@ -210,7 +212,7 @@ function Profile() {
           open={open.viewPostDialog}
           PaperProps={{
             style: {
-              backgroundColor:  "transparent",
+              backgroundColor: "transparent",
               boxShadow: "none",
             },
           }}

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
-import "../styles/Post.css";
+import "../../styles/Post.css";
 import IconButton from "@material-ui/core/IconButton";
 import InputBase from "@material-ui/core/InputBase";
-import { useStateValue } from "../context/StateProvider";
+import { useStateValue } from "../../context/StateProvider";
 // icon imports
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";

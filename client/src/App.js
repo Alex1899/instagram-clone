@@ -6,6 +6,7 @@ import {BrowserRouter as Router, Switch, Route, useHistory} from 'react-router-d
 import Login from './components/auth/Login';
 import { useStateValue } from './context/StateProvider';
 import Register from './components/auth/Register';
+import EditProfile from './components/settings/EditProfile';
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
           <Route path='/profile'>
             <Header />
             <Profile />
+          </Route>
+          <Route path='/account/edit'>
+            <Header />
+            <EditProfile />
           </Route>
         </Switch>
       </div>

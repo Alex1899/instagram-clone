@@ -38,6 +38,13 @@
     margin-left: 100px;
 }
 
+.profile__editProfile{
+    display: flex;
+    align-items: center;
+    margin-bottom: -25px;
+}
+
+
 .profile__userFollowersCount {
     display: flex;
     justify-content: space-between;
@@ -163,8 +170,3 @@ hr {
 
 }
 
-.divv {
-    border: 1px solid red;
-    display: flex;
-    justify-content: center;
-}

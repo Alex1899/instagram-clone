@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/ProfilePost.css";
+import "../../styles/ProfilePost.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
@@ -16,7 +16,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Menu, MenuItem, InputBase } from "@material-ui/core";
-import { useStateValue } from "../context/StateProvider";
+import { useStateValue } from "../../context/StateProvider";
 
 import axios from "axios";
 
@@ -142,8 +142,7 @@ function ProfilePost({ post }) {
 
   const incrementLikeCount = () => {
     axios
-      .post("/api/posts/like", {
-        postId: post._id,
+      .put(`/api/posts/like/${post._id}`, {
         id: state.userId,
         incrementCount: liked,
       })

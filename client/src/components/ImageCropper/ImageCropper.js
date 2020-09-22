@@ -52,31 +52,21 @@ const ImageCropper = ({ classes }) => {
 
   const showCroppedImage = useCallback(async () => {
     setCropping(true);
-    //try {
-      // const arr = await getCroppedImg(
-      //   selectedImage,
-      //   croppedAreaPixels
-      // );
-      // console.log("donee", arr[1]);
-      // setCroppedImageBlob(arr[1]);
-      
-      // console.log('image format => ', imageExt) ;
-
-      // blobToFile(
-      //   arr[1],
-      //   selectedImage,
-      //   imageExt
-      // ).then(file => {
-      //   console.log(file);
-      //   setCroppedImage(file);
-      // });
-    //   setCroppedImage(selectedImage);
-    //   setReadyToPost(true);
-    //   setCropDone(true);
-    // } catch (e) {
-    //   console.error(e);
-    // }
-    createPost()
+    try {
+      const arr = await getCroppedImg(
+        selectedImage,
+        croppedAreaPixels
+      );
+      console.log("donee", arr[1]);
+      setCroppedImageBlob(arr[1]);
+      // cropped image base64
+      setCroppedImage(arr[0]);
+      setReadyToPost(true);
+      setCropDone(true);
+    } catch (e) {
+      console.error(e);
+    }
+   
   }, [selectedImage, croppedImage, croppedAreaPixels]);
 
   const onClose = useCallback(() => {
@@ -85,11 +75,9 @@ const ImageCropper = ({ classes }) => {
 
   const onFileChange = async (e) => {
     let file = e.target.files[0];
-    console.log(file);
-    console.log('file path => ', file.path);
 
-    // let image = await readFile(file);
-    setSelectedImage(file);
+    let image = await readFile(file);
+    setSelectedImage(image);
   };
 
   const createPost = () => {
@@ -98,7 +86,7 @@ const ImageCropper = ({ classes }) => {
     let formData = new FormData();
     formData.append('caption', caption);
     formData.append('userId', state.userId);
-    formData.append('file', selectedImage);
+    formData.append('file', croppedImage);
 
     // save post in db
     axios
@@ -201,7 +189,7 @@ const ImageCropper = ({ classes }) => {
                 </div>
 
                 <Button
-                  onClick={createPost}
+                  onClick={showCroppedImage}
                   variant="contained"
                   color="black"
                   style={{ width: "100%" }}
