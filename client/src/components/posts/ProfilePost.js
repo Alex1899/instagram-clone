@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/ProfilePost.css";
+import "../../styles/posts/ProfilePost.css";
 import { makeStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";

@@ -1,0 +1,111 @@
+:root {
+    --padding-between-divs: 20px;
+}
+
+
+
+.editprofile__settings {
+    display: flex;
+    justify-content: center;
+}
+
+.editprofile__optionsDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (max-width: 550px ){
+    .editprofile__optionsDiv {
+        display: none;
+    }
+}
+
+.editprofile__optionsDiv > button{
+    text-align: start;
+    border: none;
+    background: none;
+    font-size: 17px;
+    padding: 15px;
+    padding-left: 25px;
+    color: rgb(94, 94, 94); 
+}
+
+.editprofile__optionsDiv > button:hover{
+    background-color: #f7f7f7;
+    border-left: 2px solid lightgray;
+    padding-left: 23px;
+}
+
+.editprofile__optionsDiv > button:active{
+    border: none;
+    outline: none;
+    padding-left: 23px;
+    opacity: .4;  
+}
+
+.editprofile__optionsDiv > button:focus{
+    outline: none;
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+    border-left: 2px solid black;
+    padding-left: 23px;
+ 
+}
+
+.editprofile__changeAvatar {
+    display: flex;
+    align-items: center;
+    padding-bottom: var(--padding-between-divs);
+}
+
+.editprofile__username {
+    font-size: 22px;
+    margin: 0;
+    padding: 0;
+}
+
+.form__field{
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--padding-between-divs);
+}
+
+.form__field > aside > label {
+    font-weight: 500;
+   
+}
+
+.helper__text {
+    font-size: 11px;
+    color: gray;
+    margin:0;
+}
+
+.editprofile__formInput {
+    width: 300px;
+    height: 20px;
+    background-color: #fcfcfc;
+    border-radius: 3px;
+    border: 1px solid lightgray;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+   
+}
+
+.editprofile__form > button {
+    border: none;
+    height: 30px;
+    border-radius: 3px;
+    background-color:  black;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.editprofile__form > button:hover {
+    opacity: .8;
+    cursor: pointer;
+}

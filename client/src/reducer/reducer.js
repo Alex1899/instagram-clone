@@ -1,7 +1,8 @@
 
 export const initialState = {
     user: null,
-    userId: null
+    userId: null,
+    avatar: null
 }
 
 export function reducer(state=initialState, action ){
@@ -17,6 +18,11 @@ export function reducer(state=initialState, action ){
                 ...state,
                 user: null,
                 userId: null
+            }
+        case "UPDATE_AVATAR":
+            return {
+                ...state,
+                avatar: action.payload.avatar
             }
         default:
             return state;

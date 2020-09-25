@@ -132,7 +132,7 @@ function Profile() {
         <div className="profile__userDetails">
           <div className="profile__editProfile">
             <p style={{ fontSize: 30, paddingRight: 30 }}>{state.user}</p>
-            <SettingsIcon onClick={()=> history.push('/account/edit')} style={{ marginBottom: -10, cursor: "pointer" }} />
+            <SettingsIcon onClick={()=> history.push('/account-edit')} style={{ marginBottom: -10, cursor: "pointer" }} />
           </div>
           <div className="profile__userFollowersCount">
             <p>

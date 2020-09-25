@@ -142,7 +142,7 @@ function Header() {
           onClick={homeClick}
         />
         {/* search bar */}
-        <div>
+        <div className="header__searchbar">
           <div style={{ display: "flex", alignItems: "center" }}>
             <input
               className="header__search"
@@ -187,7 +187,7 @@ function Header() {
             />
           </IconButton>
           <IconButton onClick={handleClick}>
-            <Avatar src="assets/avatar-pic.jpg" className={classes.small} />
+            <Avatar src={state.avatar ? state.avatar : "assets/avatar-pic.jpg"} className={classes.small} />
           </IconButton>
           {/* dropdown menu */}
           <StyledMenu
