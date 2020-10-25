@@ -34,9 +34,6 @@ const ImageCropper = ({ classes }) => {
   const [croppedImage, setCroppedImage] = useState(null);
   const [croppedImageBlob, setCroppedImageBlob] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [imageExt, setImageExt] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [fetchPosts, setFetchPosts] = useState(true);
   const [caption, setCaption] = useState("");
   const [cropping, setCropping] = useState(false);
   const [cropDone, setCropDone] = useState(false);
@@ -44,7 +41,6 @@ const ImageCropper = ({ classes }) => {
   const [uploading, setUploading] = useState(false);
 
   const { state, disptach } = useStateValue();
-  const history = useHistory();
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -93,7 +89,6 @@ const ImageCropper = ({ classes }) => {
       .post("api/posts/create", formData)
       .then((response) => {
         window.location.reload();
-        setOpen(false);
         setUploading(false);
         console.log(response.data);
       })

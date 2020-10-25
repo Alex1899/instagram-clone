@@ -117,8 +117,7 @@ function Post({
 
   const incrementLikeCount = () => {
     axios
-      .post("/api/posts/like", {
-        postId,
+      .put(`/api/posts/like/${postId}`, {
         id: state.userId,
         incrementCount: liked,
       })

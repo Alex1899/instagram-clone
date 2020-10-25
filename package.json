@@ -1,0 +1,25 @@
+{
+  "name": "instagram-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm start --prefix client",
+    "server": "npm start --prefix server",
+    "dev": "concurrently \"redis-server --maxmemory-policy allkeys-lru\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alex1899/instagram-clone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alex1899/instagram-clone/issues"
+  },
+  "homepage": "https://github.com/Alex1899/instagram-clone#readme",
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}

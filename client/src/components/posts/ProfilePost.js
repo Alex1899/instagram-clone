@@ -91,18 +91,6 @@ function ProfilePost({ post }) {
     setComment(e.target.value);
   };
 
-  useEffect(() => {
-    if (imageAlreadyLiked) {
-      if (liked) {
-        setLikeCount(likesCount + 1);
-      } else {
-        setLikeCount(likesCount - 1);
-      }
-      incrementLikeCount();
-      setAlreadyLiked(false);
-    }
-  }, [imageAlreadyLiked]);
-
   const likeClick = () => {
     setLiked(!liked);
     setAlreadyLiked(true);

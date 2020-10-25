@@ -8,9 +8,8 @@ client.hget = util.promisify(client.hget);
 
 // modifying mongoose cache function
 mongoose.Query.prototype.cache = function (options = {}) {
-  // can be useCache or editCache
+  // mode can be useCache, deleteInCache or updateInCache
   this.mode = options.mode;
-  this.args = options.args;
   // collection name
 //   this.hashKey = JSON.stringify(options.key || this.mongooseCollection.name);
   this.hashKey = this.mongooseCollection.name;
@@ -20,6 +19,7 @@ mongoose.Query.prototype.cache = function (options = {}) {
 
 // store default exec()
 const exec = mongoose.Query.prototype.exec;
+let key = "userPosts";
 
 // modify mongoose exec()
 mongoose.Query.prototype.exec = async function () {
@@ -31,7 +31,7 @@ mongoose.Query.prototype.exec = async function () {
   //     ...this.getFilter(),
   //     collection: this.mongooseCollection.name,
   //   });
-  let key = "userPosts";
+ 
 
   // get cached value from redis
   const cachedValue = await client.hget(this.hashKey, key);
@@ -47,45 +47,17 @@ mongoose.Query.prototype.exec = async function () {
 
   let doc = JSON.parse(cachedValue);
 
-  if (this.mode === "useCache" && !this.args) {
+  if (this.mode === "useCache"){
     // return cachedValue
     console.log("Returning data from redis...");
-
+       
     return Array.isArray(doc)
       ? doc.map((d) => new this.model(d))
       : new this.model(doc);
   }
-
-  if (this.mode === "editCache" && this.args) {
-    // delete posts in db
-    const result = await exec.apply(this, arguments);
-    if (result){
-        console.log('Deleted post from mongodb');
-    }
-
-    if (Array.isArray(doc)) {
-      doc = doc
-        .map((d) => new this.model(d))
-        .filter((d) => d._id != this.args.postId);
-
-      // set updated hash
-      client.hset(this.hashKey, key, JSON.stringify(doc));
-      console.log("Updated posts hash in redis...");
-
-      return doc;
-    } else {
-      doc = new this.model(doc);
-
-      if (doc._id === this.args.postId) {
-        client.del(JSON.stringify(hashKey));
-        console.log("Deleted post in the redis hash...");
-        return null;
-      }
-
-      return doc;
-    }
-  }
 };
+
+
 
 module.exports.clearHash = function (hashKey) {
   client.del(JSON.stringify(hashKey));
@@ -100,3 +72,61 @@ module.exports.addNewPostToHash = async function(post){
         console.log("Updated posts hash in redis...");
     }
 }
+
+module.exports.deletePostInCache = async function(postId, hashKey){
+  const cachedValue = await client.hget(hashkey, key);
+  let doc = JSON.parse(cachedValue);
+  if (Array.isArray(doc)) {
+    doc = doc
+      .map((d) => new mongoose.Query.prototype.model(d))
+      .filter((d) => d._id != postId);
+
+    // set updated hash
+    client.hset(hashKey, key, JSON.stringify(doc));
+    console.log("Updated posts hash in redis...");
+
+    return doc;
+  } else {
+    doc = new mongoose.Query.prototype.model(doc);
+
+    if (doc._id === postId) {
+      client.del(JSON.stringify(hashKey));
+      console.log("Deleted post in the redis hash...");
+      return null;
+    }
+
+    return doc;
+  }
+}
+
+module.exports.updatePostLikesInCache = async function(postId, userLikedList, hashkey){
+  const cachedValue = await client.hget(hashkey, key);
+  let doc = JSON.parse(cachedValue);
+  if (Array.isArray(doc)) {
+    doc = doc
+      .map((d) => {
+        console.log(typeof d);
+        if (d._id === postId){
+          d.userLikedList = userLikedList;
+        }
+        return d;
+      });
+     
+
+    // set updated hash
+    client.hset(hashkey, key, JSON.stringify(doc));
+    console.log("Updated posts hash in redis...");
+
+    return doc;
+  } else {
+    doc = new mongoose.model(doc);
+
+    if (doc._id === postId) {
+      doc.userLikedList = userLikedList;
+      client.hset(hashKey, key, JSON.stringify(doc));
+      console.log("Updated post in the redis hash...");
+      return doc;
+    }
+  }
+}
+

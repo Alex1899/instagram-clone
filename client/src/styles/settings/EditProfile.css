@@ -43,7 +43,7 @@
     opacity: .4;  
 }
 
-.editprofile__optionsDiv > button:focus{
+.editprofile__optionsDiv > button.pressed{
     outline: none;
     color: black;
     font-weight: 500;
