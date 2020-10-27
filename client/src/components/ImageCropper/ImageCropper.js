@@ -79,14 +79,12 @@ const ImageCropper = ({ classes }) => {
   const createPost = () => {
     setUploading(true);
 
-    let formData = new FormData();
-    formData.append('caption', caption);
-    formData.append('userId', state.userId);
-    formData.append('file', croppedImage);
-
     // save post in db
-    axios
-      .post("api/posts/create", formData)
+    axios.post("/api/posts/create", {
+        caption,
+        userId: state.userId,
+        file: croppedImage
+      })
       .then((response) => {
         window.location.reload();
         setUploading(false);

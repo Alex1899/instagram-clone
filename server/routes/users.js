@@ -1,14 +1,15 @@
 var express = require('express');
 var router = express.Router();
 const User = require('../model/userSchema');
-const authController = require('../controllers/authController');
+const userController = require('../controllers/userController');
 
 
 /* GET users listing. */
-router.post('/register', authController.register_user);
+router.post('/register', userController.register_user);
 
-router.post('/login', authController.login_user);
+router.post('/login', userController.login_user);
 
+router.post('/avatar', userController.update_userAvatar);
 
 router.get('/:username', async function(req, res, next){
   const { username } = req.params;

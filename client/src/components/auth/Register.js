@@ -11,7 +11,8 @@ function Register() {
         fullname: '',
         username: '',
         password: '',
-        passwordCheck: ''
+        passwordCheck: '',
+        avatar: ''
     }
 
     const [ formData, setFormData ] = useState(initialFormData);

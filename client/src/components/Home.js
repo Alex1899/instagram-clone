@@ -11,9 +11,7 @@ function Home() {
     const { state, dispatch } = useStateValue();
 
     useEffect(() => {
-        axios.get(`/api/posts/${state.userId}`, {
-            userId: state.userId
-        })
+        axios.get(`/api/posts/${state.userId}`)
             .then(response => {
                 console.log(response.data);
                 setPosts(response.data.posts);
@@ -25,7 +23,7 @@ function Home() {
     return (
         <div className="home__feed">
             
-            {posts.map(post => {
+            {posts.length >= 1 && posts.map(post => {
                     return <Post
                                key={post._id}
                                postId={post._id}

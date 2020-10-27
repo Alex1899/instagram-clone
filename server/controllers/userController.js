@@ -1,7 +1,6 @@
 const User = require("../model/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { create } = require("../model/userSchema");
 
 // handle errors
 const handleErrors = (err) => {
@@ -54,9 +53,9 @@ module.exports.register_user = async function (req, res, next) {
     //   return res.status(400).send({ msg: "Passwords do not match." });
 
     const user = await User.create(userData);
-    const token = create(user._id);
+    const token = createToken(user._id);
     res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000});
-    res.send({ user: user.username });
+    res.send({ username: user.username, userId: user._id });
   } catch (err) {
     const errors = handleErrors(err);
     res.status(400).json({ errors });
@@ -77,5 +76,15 @@ module.exports.login_user = async function (req, res, next) {
   if (!match)
     return res.status(400).send({ msg: "Incorrect password for this user" });
 
-  res.send({ username: user.username, userId: user._id });
+  res.send({ username: user.username, userId: user._id, avatar: user.avatar });
 };
+
+module.exports.update_userAvatar = async function(req, res, next){
+  const { id, imageData } = req.body;
+  const user = await User.findByIdAndUpdate({_id: id}, { avatar: imageData});
+  if (!result){
+    return res.status(500).send({msg: "Error when updating user avatar"});
+  }
+  res.send({status: "ok"});
+  console.log("Updated user avatar in database...");
+}

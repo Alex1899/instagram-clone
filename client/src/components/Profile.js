@@ -163,7 +163,7 @@ function Profile() {
             </div>
           </div>
           <Grid container spacing={4}>
-            {posts &&
+            {posts.length >=1 &&
               posts.map((post) => {
                 return (
                   <Grid

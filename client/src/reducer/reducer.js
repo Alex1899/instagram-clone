@@ -11,13 +11,15 @@ export function reducer(state=initialState, action ){
             return {
                 ...state,
                 user: action.payload.username,
-                userId: action.payload.userId
+                userId: action.payload.userId,
+                avatar: action.payload.avatar
             }
         case "LOGOUT_USER":
             return {
                 ...state,
                 user: null,
-                userId: null
+                userId: null,
+                avatar: null
             }
         case "UPDATE_AVATAR":
             return {

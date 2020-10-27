@@ -13,8 +13,9 @@ import {
   Select,
 } from "@material-ui/core";
 import { useStateValue } from "../../context/StateProvider";
-import StyledCropper from "../ImageCropper/ImageCropper";
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   small: {
@@ -45,7 +46,6 @@ function EditProfile() {
   const handleClickOpen = () => {
     setProfilePicSelected(false);
     setOpen(true);
-    
   };
 
   const handleClose = (value) => {
@@ -74,7 +74,20 @@ function EditProfile() {
     });
 
   const handleUploadPhoto = () => {
-    inputFile.current.click();
+    axios
+      .post("/api/users/avatar", {
+        id: state.userId,
+        imageData: uploadedPic,
+      })
+      .then((res) => {
+        if (res.data.status == "ok") {
+          dispatch("UPDATE_AVATAR", {
+            avatar: uploadedPic,
+          });
+        }
+        handleClose();
+      })
+      .catch((e) => console.log(e));
   };
 
   const handleListItemClick = () => {};
@@ -191,41 +204,70 @@ function EditProfile() {
         maxWidth="sm"
         style={{ textAlign: "center" }}
       >
-        
         {!profilePicSelected ? (
           <>
-          <DialogTitle id="simple-dialog-title">Change Profile Photo</DialogTitle>
-          <List>
-            <ListItem
-              className={classes.listItemText}
-              button
-              onClick={() => handleUploadPhoto()}
-              style={{ color: "#1a94ff" }}
-            >
-              Upload photo
-            </ListItem>
-            <ListItem
-              className={classes.listItemText}
-              button
-              onClick={() => handleListItemClick()}
-              style={{ color: "red" }}
-            >
-              Remove current photo
-            </ListItem>
-            <ListItem
-              className={classes.listItemText}
-              button
-              onClick={() => handleClose()}
-            >
-              Cancel
-            </ListItem>
-          </List>
+            <DialogTitle id="simple-dialog-title">
+              Change Profile Photo
+            </DialogTitle>
+            <List>
+              <ListItem
+                className={classes.listItemText}
+                button
+                onClick={() => inputFile.current.click()}
+                style={{ color: "#1a94ff" }}
+              >
+                Upload photo
+              </ListItem>
+              <ListItem
+                className={classes.listItemText}
+                button
+                onClick={() => handleListItemClick()}
+                style={{ color: "red" }}
+              >
+                Remove current photo
+              </ListItem>
+              <ListItem
+                className={classes.listItemText}
+                button
+                onClick={() => handleClose()}
+              >
+                Cancel
+              </ListItem>
+            </List>
           </>
         ) : (
-          <div style={{ height: 150, display: 'flex', alignItems:"center", justifyContent: "center"}}>
-            <p>Profile photo was uploaded successfully!</p>
-            <CheckCircleOutlineIcon style={{color: "green", marginLeft: 10}}/>
-            </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {uploadedPic && (
+              <>
+                <img
+                  style={{ width: "100%", objectFit: "contain" }}
+                  src={uploadedPic}
+                  alt="uploaded pic"
+                />
+                {/* <CheckCircleOutlineIcon
+                style={{ color: "green", marginLeft: 10 }}/> */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: 20,
+                  }}
+                >
+                  <Button onClick={handleUploadPhoto}>Submit</Button>
+                  <Button onClick={handleClose} style={{ marginLeft: 20 }}>
+                    Cancel
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
         )}
       </Dialog>
     </div>

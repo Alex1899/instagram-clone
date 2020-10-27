@@ -140,7 +140,7 @@ function ProfilePost({ post }) {
 
   const deletePost = (postId) => {
     axios
-      .delete(`/api/posts/delete/${postId}`)
+      .delete(`/api/posts/delete/${postId}`,{ userId: state.userId})
       .then((res) => {
         console.log(res.data);
         setAnchorEl(null);
