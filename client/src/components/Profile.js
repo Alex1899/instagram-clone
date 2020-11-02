@@ -129,7 +129,10 @@ function Profile() {
       {/* avatar, username */}
 
       <div className="profile__info">
-        <Avatar src="assets/avatar-pic.jpg" className={classes.large} />
+        <Avatar
+          src={state.avatar ? state.avatar : "assets/avatar-pic.jpg"}
+          className={classes.large}
+        />
         <div className="profile__userDetails">
           <div className="profile__editProfile">
             <p style={{ fontSize: 30, paddingRight: 30 }}>{state.user}</p>

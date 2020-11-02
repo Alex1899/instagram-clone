@@ -25,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(4),
     height: theme.spacing(4),
   },
+  medium: {
+    width: theme.spacing(5),
+    height: theme.spacing(5),
+  },
   large: {
     width: theme.spacing(7),
     height: theme.spacing(7),
@@ -33,8 +37,7 @@ const useStyles = makeStyles((theme) => ({
     width: 600,
     border: "1px solid lightgray",
     marginBottom: 60,
-   
-  }
+  },
 }));
 
 function Post({
@@ -134,7 +137,10 @@ function Post({
         <div className="post__header">
           <div className="post__avatar">
             <Box pr={2}>
-              <Avatar src="assets/avatar-pic.jpg" className={classes.small} />
+              <Avatar
+                src={state.avatar ? state.avatar : "assets/avatar-pic.jpg"}
+                className={classes.medium}
+              />
             </Box>
 
             <div className="post__usernameLocation">
@@ -155,7 +161,11 @@ function Post({
         </div>
 
         {/* photo */}
-        <Image className="post__image" cloudName="igcloudtest" publicId={imageUrl} />
+        <Image
+          className="post__image"
+          cloudName="igcloudtest"
+          publicId={imageUrl}
+        />
 
         {/* like comment send save buttons */}
         <div className="post__controls">

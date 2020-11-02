@@ -17,8 +17,7 @@ import Box from "@material-ui/core/Box";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Menu, MenuItem, InputBase } from "@material-ui/core";
 import { useStateValue } from "../../context/StateProvider";
-import { Image } from 'cloudinary-react';
-
+import { Image } from "cloudinary-react";
 
 import axios from "axios";
 
@@ -142,7 +141,7 @@ function ProfilePost({ post }) {
 
   const deletePost = (postId) => {
     axios
-      .delete(`/api/posts/delete/${postId}`,{ userId: state.userId})
+      .delete(`/api/posts/delete/${postId}`, { userId: state.userId })
       .then((res) => {
         console.log(res.data);
         setAnchorEl(null);
@@ -176,7 +175,11 @@ function ProfilePost({ post }) {
             alignItems: "center",
           }}
         >
-          <Image className="gridImage" cloudName="igcloudtest" publicId={post.imageId} />
+          <Image
+            className="gridImage"
+            cloudName="igcloudtest"
+            publicId={post.imageId}
+          />
         </Grid>
 
         <Grid item xs={12} sm={7} lg={4}>
@@ -187,7 +190,9 @@ function ProfilePost({ post }) {
                 <div className="profilePost__avatar">
                   <Box pr={2}>
                     <Avatar
-                      src="assets/avatar-pic.jpg"
+                      src={
+                        state.avatar ? state.avatar : "assets/avatar-pic.jpg"
+                      }
                       className={classes.small}
                     />
                   </Box>
@@ -240,7 +245,11 @@ function ProfilePost({ post }) {
                       >
                         <Box pr={2}>
                           <Avatar
-                            src="assets/avatar-pic.jpg"
+                            src={
+                              state.avatar
+                                ? state.avatar
+                                : "assets/avatar-pic.jpg"
+                            }
                             className={classes.small}
                           />
                         </Box>
@@ -277,7 +286,6 @@ function ProfilePost({ post }) {
                 <div
                   className="profilePost__comments"
                   style={{
-                   
                     maxHeight: !caption ? 260 : 210,
                     overflowY: "auto",
                   }}
@@ -292,7 +300,11 @@ function ProfilePost({ post }) {
                           >
                             <Box pr={2}>
                               <Avatar
-                                src="assets/avatar-pic.jpg"
+                                src={
+                                  state.avatar
+                                    ? state.avatar
+                                    : "assets/avatar-pic.jpg"
+                                }
                                 className={classes.small}
                               />
                             </Box>

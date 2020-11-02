@@ -76,15 +76,19 @@ function EditProfile() {
   const handleUploadPhoto = () => {
     axios
       .post("/api/users/avatar", {
-        id: state.userId,
+        userId: state.userId,
         imageData: uploadedPic,
       })
       .then((res) => {
-        if (res.data.status == "ok") {
-          dispatch("UPDATE_AVATAR", {
-            avatar: uploadedPic,
-          });
-        }
+        console.log(res.data.avatarUrl);
+        console.log("dispatching...");
+        dispatch({
+          type: "UPDATE_AVATAR",
+          payload: {
+            avatar: res.data.avatarUrl,
+          },
+        });
+
         handleClose();
       })
       .catch((e) => console.log(e));
@@ -187,8 +191,8 @@ function EditProfile() {
               <MenuItem value="">None</MenuItem>
               <MenuItem value="Male">Male</MenuItem>
               <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="Prefer-not">Prefer not to say</MenuItem>
               <MenuItem value="Other">Other</MenuItem>
+              <MenuItem value="Prefer-not">Prefer not to say</MenuItem>
             </Select>
           </FormControl>
         </div>

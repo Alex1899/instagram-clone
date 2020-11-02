@@ -1,6 +1,7 @@
 const User = require("../model/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { cloudinary } = require("../utils/cloudinary");
 
 // handle errors
 const handleErrors = (err) => {
@@ -80,11 +81,15 @@ module.exports.login_user = async function (req, res, next) {
 };
 
 module.exports.update_userAvatar = async function(req, res, next){
-  const { id, imageData } = req.body;
-  const user = await User.findByIdAndUpdate({_id: id}, { avatar: imageData});
-  if (!result){
+  const { userId, imageData } = req.body;
+
+  const uploadedResponse = await cloudinary.uploader.upload(imageData, {folder: userId + '/' });
+  console.log('uploaded responce =>', uploadedResponse);
+
+  const user = await User.findByIdAndUpdate({_id: userId}, { avatar: uploadedResponse.secure_url});
+  if (!user){
     return res.status(500).send({msg: "Error when updating user avatar"});
   }
-  res.send({status: "ok"});
+  res.send({avatarUrl: user.avatar});
   console.log("Updated user avatar in database...");
 }
