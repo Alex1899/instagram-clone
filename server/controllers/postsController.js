@@ -1,4 +1,5 @@
 const Post = require("../model/postSchema");
+const { cloudinary } = require("../utils/cloudinary");
 const { clearHash, addNewPostToHash, updatePostLikesInCache, deletePostInCache } = require("../services/cache");
 
 
@@ -7,7 +8,7 @@ module.exports.getAllUserPosts = async function (req, res, next) {
   if (!userId) {
     return res.status(400).send({ msg: "Empty request" });
   }
-  let posts = await Post.find({ userId }).cache({ userId, mode: "useCache" });
+  let posts = await Post.find({ userId })
   if (!posts) {
     console.log("There are no user posts in the db...");
     return res.send({ posts });
@@ -24,14 +25,15 @@ module.exports.getAllUserPosts = async function (req, res, next) {
 module.exports.createPost = async function (req, res, next) {
   try {
     const { userId, caption, file } = req.body;
-    console.log(req.body);
     if (!userId) return res.status(400).send({ msg: "User id not supplied" });
     console.log('in the function');
-    let newPostId;
+  
+    const uploadedResponse = await cloudinary.uploader.upload(file, {folder: userId + '/' });
+    console.log('uploaded responce =>', uploadedResponse);
 
     const post = new Post({
       userId,
-      imageId: file,
+      imageId: uploadedResponse.public_id,
       caption,
       userLikedList: [],
       comments: [],
@@ -39,8 +41,7 @@ module.exports.createPost = async function (req, res, next) {
     const savedPost = await post.save();
     addNewPostToHash(userId, savedPost);
 
-    newPostId = savedPost._id;
-    res.send({ postId: newPostId });
+    res.send({ postId: savedPost._id });
   } catch (e) {
     console.log("Error", e);
   }

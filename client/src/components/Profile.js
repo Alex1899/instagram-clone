@@ -20,6 +20,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { readFile } from "../components/ImageCropper/utils";
+import { Image } from "cloudinary-react";
 
 const styles = (theme) => ({
   root: {
@@ -132,7 +133,10 @@ function Profile() {
         <div className="profile__userDetails">
           <div className="profile__editProfile">
             <p style={{ fontSize: 30, paddingRight: 30 }}>{state.user}</p>
-            <SettingsIcon onClick={()=> history.push('/account-edit')} style={{ marginBottom: -10, cursor: "pointer" }} />
+            <SettingsIcon
+              onClick={() => history.push("/account-edit")}
+              style={{ marginBottom: -10, cursor: "pointer" }}
+            />
           </div>
           <div className="profile__userFollowersCount">
             <p>
@@ -163,7 +167,7 @@ function Profile() {
             </div>
           </div>
           <Grid container spacing={4}>
-            {posts.length >=1 &&
+            {posts.length >= 1 &&
               posts.map((post) => {
                 return (
                   <Grid
@@ -176,11 +180,12 @@ function Profile() {
                       onClick={() => handleClickOpen("VIEW_POST", post)}
                       className="container"
                     >
-                      <img
+                      <Image
                         className="profile__image"
-                        src={post.imageId}
-                        alt="Post image"
+                        cloudName="igcloudtest"
+                        publicId={post.imageId}
                       />
+
                       <div className="overlay">
                         <div className="divPad">
                           <img src="icons/like/small-heart.svg" alt="likes" />

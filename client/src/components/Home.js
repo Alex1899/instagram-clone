@@ -24,6 +24,7 @@ function Home() {
         <div className="home__feed">
             
             {posts.length >= 1 && posts.map(post => {
+                    console.log(post.imageId);
                     return <Post
                                key={post._id}
                                postId={post._id}

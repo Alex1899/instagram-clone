@@ -17,6 +17,8 @@ import Box from "@material-ui/core/Box";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Menu, MenuItem, InputBase } from "@material-ui/core";
 import { useStateValue } from "../../context/StateProvider";
+import { Image } from 'cloudinary-react';
+
 
 import axios from "axios";
 
@@ -174,7 +176,7 @@ function ProfilePost({ post }) {
             alignItems: "center",
           }}
         >
-          <img className="gridImage" src={post.imageId} alt="post image" />
+          <Image className="gridImage" cloudName="igcloudtest" publicId={post.imageId} />
         </Grid>
 
         <Grid item xs={12} sm={7} lg={4}>

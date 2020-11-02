@@ -12,6 +12,7 @@ import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
 import BookmarkIcon from "@material-ui/icons/Bookmark";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
+import { Image } from "cloudinary-react";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -154,7 +155,7 @@ function Post({
         </div>
 
         {/* photo */}
-        <img className="post__image" src={imageUrl} alt="post image" />
+        <Image className="post__image" cloudName="igcloudtest" publicId={imageUrl} />
 
         {/* like comment send save buttons */}
         <div className="post__controls">
