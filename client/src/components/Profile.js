@@ -85,18 +85,22 @@ function Profile() {
   const [fetchPosts, setFetchPosts] = useState(true);
   const { state, dispatch } = useStateValue();
   const history = useHistory();
-  const matches = useMediaQuery("(max-width:300px)");
+
+
+  const getAllUserPost = () =>{
+    axios
+    .get(`/api/posts/${state.userId}`)
+    .then((response) => {
+      console.log(response.data);
+      setPosts(response.data.posts);
+      setFetchPosts(false);
+    })
+    .catch((error) => console.log(error));
+  }
 
   useEffect(() => {
     if (fetchPosts) {
-      axios
-        .get(`/api/posts/${state.userId}`)
-        .then((response) => {
-          console.log(response.data);
-          setPosts(response.data.posts);
-          setFetchPosts(false);
-        })
-        .catch((error) => console.log(error));
+      getAllUserPost();
     }
   }, [fetchPosts]);
 
@@ -229,7 +233,7 @@ function Profile() {
             id="customized-dialog-title"
             onClose={() => handleClose("VIEW_POST")}
           />
-          <ProfilePost post={viewPost} />
+          <ProfilePost post={viewPost} getAllUserPosts={getAllUserPost} />
         </Dialog>
       )}
 

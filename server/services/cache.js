@@ -15,7 +15,7 @@ mongoose.Query.prototype.cache = function (options = {}) {
   this.userId = options.userId;
   // collection name
   //   this.hashKey = JSON.stringify(options.key || this.mongooseCollection.name);
-  hashKey = this.mongooseCollection.name;
+  //hashKey = this.mongooseCollection.name;
   console.log("collection name =>>>>", this.mongooseCollection.name);
   return this;
 };
@@ -41,14 +41,14 @@ mongoose.Query.prototype.exec = async function () {
   if (!cachedValue || cachedValue === "[]") {
     console.log("Returing data from mongodb...");
     const result = await exec.apply(this, arguments);
-    if(result.length >= 1){
+    if (result.length >= 1) {
       client.hset(
         hashKey,
         key,
         JSON.stringify({ userId: this.userId, posts: result })
       );
     }
-    
+
     return result;
   }
 
@@ -58,10 +58,10 @@ mongoose.Query.prototype.exec = async function () {
     // return cachedValue
     console.log("Returning data from redis...");
 
-    if(obj.userId == this.userId){
+    if (obj.userId == this.userId) {
       return Array.isArray(obj.posts)
-      ? obj.posts.map((d) => new this.model(d))
-      : new this.model(obj.posts);
+        ? obj.posts.map((d) => new this.model(d))
+        : new this.model(obj.posts);
     }
   }
 };
@@ -77,51 +77,47 @@ module.exports.addNewPostToHash = async function (userId, post) {
     if (obj.userId == userId) {
       if (Array.isArray(obj.posts)) {
         obj.posts = [...obj.posts, post];
-        client.hset(
-          "posts",
-          "userPosts",
-          JSON.stringify({ userId, posts: obj.posts })
-        );
+        client.hset(hashKey, key, JSON.stringify({ userId, posts: obj.posts }));
         console.log("Updated posts hash in redis...");
       }
     } else {
       console.log("cannot add post to hash! UserId is wrong!");
     }
-  }else{
-    client.hset(
-      hashKey,
-      key,
-      JSON.stringify({ userId, posts: post })
-    );
+  } else {
+    client.hset(hashKey, key, JSON.stringify({ userId, posts: post }));
   }
 };
 
 module.exports.deletePostInCache = async function (userId, postId) {
-  let obj = await client.hget(hashkey, key);
-  obj = JSON.parse(obj);
-  if (obj.userId == userId) {
-    if (Array.isArray(obj.posts)) {
-      obj.posts = obj.posts
-        .map((d) => new mongoose.Query.prototype.model(d))
-        .filter((d) => d._id != postId);
+  let obj = await client.hget(hashKey, key);
+  if (obj) {
+    obj = JSON.parse(obj);
+    if (obj.userId == userId) {
+      if (Array.isArray(obj.posts)) {
+        obj.posts = obj.posts
+          .map((d) => new mongoose.Query.prototype.model(d))
+          .filter((d) => d._id != postId);
 
-      // set updated hash
-      client.hset(hashKey, key, JSON.stringify({ userId, posts: obj.posts }));
-      console.log("Updated posts hash in redis...");
+        // set updated hash
+        client.hset(hashKey, key, JSON.stringify({ userId, posts: obj.posts }));
+        console.log("Updated posts hash in redis...");
 
-      return obj.posts;
-    } else {
-      let post = obj.posts;
-      post = new mongoose.Query.prototype.model(post);
+        return obj.posts;
+      } else {
+        let post = obj.posts;
+        post = new mongoose.Query.prototype.model(post);
 
-      if (post._id === postId) {
-        client.del(JSON.stringify(hashKey));
-        console.log("Deleted post in the redis hash...");
-        return null;
+        if (post._id === postId) {
+          client.del(JSON.stringify(hashKey));
+          console.log("Deleted post in the redis hash...");
+          return null;
+        }
+
+        return post;
       }
-
-      return post;
     }
+  } else {
+    console.log("redis cache empty");
   }
 };
 
@@ -130,33 +126,37 @@ module.exports.updatePostLikesInCache = async function (
   postId,
   userLikedList
 ) {
-  let obj = await client.hget(hashkey, key);
-  obj = JSON.parse(obj);
-  if (obj.userId == userId) {
-    if (Array.isArray(obj.posts)) {
-      obj.posts = obj.posts.map((d) => {
-        console.log(typeof d);
-        if (d._id === postId) {
-          d.userLikedList = userLikedList;
+  let obj = await client.hget(hashKey, key);
+  if (obj) {
+    obj = JSON.parse(obj);
+    if (obj.userId == userId) {
+      if (Array.isArray(obj.posts)) {
+        obj.posts = obj.posts.map((d) => {
+          console.log(typeof d);
+          if (d._id === postId) {
+            d.userLikedList = userLikedList;
+          }
+          return d;
+        });
+
+        // set updated hash
+        client.hset(hashKey, key, JSON.stringify({ userId, posts: obj.posts }));
+        console.log("Updated posts hash in redis...");
+
+        return obj.posts;
+      } else {
+        let post = obj.posts;
+        post = new mongoose.model(post);
+
+        if (post._id === postId) {
+          post.userLikedList = userLikedList;
+          client.hset(hashKey, key, JSON.stringify({ userId, posts: obj }));
+          console.log("Updated post in the redis hash...");
+          return post;
         }
-        return d;
-      });
-
-      // set updated hash
-      client.hset(hashkey, key, JSON.stringify({ userId, posts: obj.posts }));
-      console.log("Updated posts hash in redis...");
-
-      return obj.posts;
-    } else {
-      let post = obj.posts;
-      post = new mongoose.model(post);
-
-      if (post._id === postId) {
-        post.userLikedList = userLikedList;
-        client.hset(hashKey, key, JSON.stringify({ userId, posts: obj }));
-        console.log("Updated post in the redis hash...");
-        return post;
       }
     }
+  } else {
+    console.log("redis cache empy");
   }
 };

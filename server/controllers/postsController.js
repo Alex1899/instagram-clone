@@ -51,8 +51,6 @@ module.exports.commentOnPost = async function (req, res, next) {
   try {
     console.log("post data", req.body);
     const { postId, comment, username } = req.body;
-    console.log(comment);
-    console.log(comment.toString());
     const post = await Post.findOne({ _id: postId });
     let comments;
 

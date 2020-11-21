@@ -43,7 +43,7 @@ const DialogContent = withStyles((theme) => ({
   },
 }))(MuiDialogContent);
 
-function ProfilePost({ post }) {
+function ProfilePost({ post, getAllUserPosts }) {
   const classes = useStyles();
   const { state, dispatch } = useStateValue();
 
@@ -61,7 +61,7 @@ function ProfilePost({ post }) {
   const [likesCount, setLikeCount] = useState(post.userLikedList.length);
   const [imageAlreadyLiked, setAlreadyLiked] = useState(null);
   const [caption, setCaption] = useState(post.caption);
-  const [postComments, setPostComments] = useState(post.comments);
+  const [postComments, setPostComments] = useState(post.comments); //brings all the comments back, need to set max 100 comments, then request more
   const [comment, setComment] = useState("");
 
   useEffect(() => {
@@ -125,6 +125,7 @@ function ProfilePost({ post }) {
       .then((res) => {
         console.log("response => ", res.data.comments);
         setPostComments(res.data.comments);
+        getAllUserPosts();
       })
       .catch((e) => console.log(e));
   };
@@ -135,7 +136,10 @@ function ProfilePost({ post }) {
         id: state.userId,
         incrementCount: liked,
       })
-      .then((response) => console.log("new likescount", response.data))
+      .then((response) => {
+        console.log("new likescount", response.data);
+        getAllUserPosts();
+      })
       .catch((e) => console.log(e));
   };
 
@@ -146,6 +150,7 @@ function ProfilePost({ post }) {
         console.log(res.data);
         setAnchorEl(null);
         window.location.reload();
+        getAllUserPosts();
       })
       .catch((err) => console.log(err));
   };
